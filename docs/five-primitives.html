@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The five primitives I run a whole company on — The Solo Operator</title>
+<meta name="description" content="A one-person company is not a productivity hack. It is four agents and one rule. Here is the exact stack I use to run inventory, billing, bookkeeping, filings, and production deploys alone.">
+<link rel="canonical" href="https://methezone.github.io/solo-operator-playbook/five-primitives.html">
+<meta property="og:type" content="article"><meta property="og:title" content="The five primitives I run a whole company on — The Solo Operator">
+<meta property="og:description" content="A one-person company is not a productivity hack. It is four agents and one rule. Here is the exact stack I use to run inventory, billing, bookkeeping, filings, and production deploys alone."><meta property="og:url" content="https://methezone.github.io/solo-operator-playbook/five-primitives.html">
+<meta property="og:site_name" content="The Solo Operator"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The five primitives I run a whole company on","description":"A one-person company is not a productivity hack. It is four agents and one rule. Here is the exact stack I use to run inventory, billing, bookkeeping, filings, and production deploys alone.","datePublished":"2026-07-28","author":{"@type":"Person","name":"The Solo Operator"},"mainEntityOfPage":"https://methezone.github.io/solo-operator-playbook/five-primitives.html"}</script>
+</head><body><header class="site"><div class="bar"><svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g fill="#141413"><rect x="19" y="0" width="2" height="40"/><rect x="0" y="19" width="40" height="2"/><rect x="19" y="0" width="2" height="40" transform="rotate(45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(-45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(67.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-67.5 20 20)" opacity=".5"/></g></svg><span class="name">The Solo Operator</span>
+<nav><a href="index.html">Articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler" class="cta">Free sampler</a></nav></div></header><div class="wrap"><article class="post-body">
+<div class="kicker">Pillar</div>
+<h1>The five primitives I run a whole company on</h1>
+<div class="byline">2026-07-28 · 9 min read</div>
+<p>I run a consumer product company by myself. Physical inventory, two storefronts, multiple marketplaces, subscription billing, bookkeeping, tax filings, government paperwork, content in two languages, and a codebase that ships to production most weeks. Headcount: one. Not &quot;one plus a virtual assistant.&quot; One.</p>
+<p>Three years ago this was not possible. It is also not possible today by keeping a chat window open and asking it questions. The thing that changed is not that models got smarter in the abstract. The thing that changed is that agents can now <strong>operate software the way an employee does</strong>: click through admin dashboards, fill in government forms, read email, write and deploy code, remember what happened last Tuesday, and run on a schedule without being asked.</p>
+<p>Once that is true, most of what a small company&#39;s staff does becomes a workflow you can write down, hand to an agent, and audit weekly instead of doing daily.</p>
+<p>Everything I run sits on five primitives. Tool names will churn every six months. These won&#39;t.</p>
+<h2>1. A browser-operating agent</h2>
+<p>An agent that drives a real browser session with my real logins: seller dashboards, banking portals, government sites, ad platforms, email.</p>
+<p>This is the highest-leverage primitive, and it is the one most people skip. The reason is uncomfortable: <strong>roughly 90% of small-business operations live behind a login wall with no usable API.</strong> Your marketplace seller console. Your payment provider&#39;s merchant dashboard. Your country&#39;s tax portal. The grant program that still ships application forms as attachments.</p>
+<p>If your automation strategy requires an official API for everything, you will automate the 10% that already had one, and you will still be doing the other 90% by hand at 11pm.</p>
+<p>The browser agent is my hands. It logs in, navigates, reads what&#39;s on screen, fills forms, downloads documents, and reports what it found.</p>
+<h2>2. A coding agent</h2>
+<p>An agent that reads my repositories, writes changes, opens a review pass, and deploys.</p>
+<p>I treat it exactly like a contractor with commit access and a probation period that never ends. It built the storefront, the internal dashboards, the scrapers, and all the glue scripts. My job is not to write the code. My job is to read a diff at the level of &quot;this changes the checkout page and nothing else&quot; and to notice when that claim is false.</p>
+<p>That distinction matters more than it sounds. You do not need to be able to write the feature. You need to be able to tell whether the change is contained.</p>
+<h2>3. Scheduled routines</h2>
+<p>Recurring jobs. &quot;Every morning at 7, scan these five grant portals and report anything new.&quot; &quot;Every day, draft two posts and three replies for my approval.&quot;</p>
+<p>The unlock here is psychological as much as technical. A solo operator&#39;s scarcest resource is not hours, it is <strong>open loops</strong> — the things you&#39;re holding in your head because if you forget them, nobody else will remember. Every loop you hold costs attention whether or not you act on it.</p>
+<p>Things that run on a schedule stop occupying your head. That is the actual product.</p>
+<p>One rule I learned the hard way: <strong>a scheduled job must report &quot;nothing changed&quot; explicitly.</strong> If silence can mean either &quot;no news&quot; or &quot;the job has been broken for nine days,&quot; you will eventually discover it was the second one. Mine tell me they found nothing. Then silence always means breakage.</p>
+<h2>4. Persistent memory</h2>
+<p>Structured notes my agents read and write: per-site notes (&quot;this bookkeeping tool&#39;s export button is under Settings → Data&quot;), per-project notes (&quot;payment provider B&#39;s review is pending, last checked on the 23rd&quot;), and per-decision notes (&quot;subscriptions stay on card billing only; do not re-add wallet pay to subscriptions&quot;).</p>
+<p>Without memory, every session starts from zero and re-makes old mistakes. You re-explain your business, the agent re-discovers that the export button moved, and it re-proposes the thing you rejected in March.</p>
+<p>With memory, your staff has tenure. This is the difference between an intern who started this morning and one who has been with you a year.</p>
+<p>The trap is dumping everything into one giant note. Then retrieval gets worse as it grows, and the agent reads three thousand words of history to answer a question about one dashboard. Split it: one file per site, one per project, one per durable decision.</p>
+<h2>5. Approval gates</h2>
+<p>The rule that makes all of the above safe enough to run on a business with real money in it:</p>
+<blockquote>
+<p>Agents draft. I approve. Agents execute.</p>
+</blockquote>
+<p>Anything irreversible passes an explicit human checkpoint. Sending money. Filing a government application. Posting publicly. Emailing a customer. Deploying to production.</p>
+<p>People read that as a compromise on automation — as if the gate is the part I haven&#39;t automated yet. It is the opposite. <strong>The gate is the automation strategy.</strong> It converts a hundred hours of doing into one hour of reviewing, and reviewing is a job one person can actually hold.</p>
+<p>It also changes the cost of failure, which is what makes the whole thing possible. An agent that drafts a bad grant application costs me five minutes of review. An agent that <em>submits</em> a bad grant application costs me a lot more than five minutes. So mine can&#39;t.</p>
+<h2>What this actually buys, honestly</h2>
+<p>In conservative terms, across the last stretch of running this way:</p>
+<ul>
+<li>It covers roughly two to four full-time roles&#39; worth of routine work: ops assistant, bookkeeper&#39;s assistant, junior marketer, junior developer.</li>
+<li>It costs a few hundred dollars a month in tooling. Less than one day of one employee.</li>
+<li>It does <strong>not</strong> replace judgment. I still decide pricing, brand, product, and legal strategy. Agents make those decisions cheap to execute, not unnecessary to make.</li>
+<li>It fails regularly. A deploy shipped wrong subscription discount tiers. A refund reported &quot;done&quot; that the payment gateway had actually blocked. A scraper returned stale competitor data for nine days without complaining. Every one of those became a checklist line.</li>
+</ul>
+<p>That last point is the one I&#39;d underline. The failures are survivable <em>because</em> of the gates, not because the agents are reliable. Anyone selling you the version where the agents don&#39;t fail is selling you something else.</p>
+<h2>Where to start if you&#39;re one person</h2>
+<p>Do not install all five at once. The order that worked:</p>
+<ol>
+<li><strong>Pick the single workflow that wastes the most of your week.</strong> Run it manually with an agent twice before you schedule it. You are debugging your own process description, not the model.</li>
+<li><strong>Write the memory notes.</strong> The moment you stop re-explaining your business, everything else gets cheaper.</li>
+<li><strong>Put gates on money paths before you automate them</strong>, not after.</li>
+<li><strong>Then schedule.</strong> Only things that have already worked manually twice.</li>
+</ol>
+<p>The failure mode I see most often is the reverse: schedule first, discover later that the workflow was never right, and end up with a cron job that produces confident garbage every morning at seven.</p>
+<hr>
+<p>This is the introduction to a longer thing. I wrote down all 30 workflows I actually run — each with the numbered playbook, a copy-paste prompt, the pitfalls that burned me, and honest time and money ranges.</p>
+<div class="cta-card"><div class="eyebrow">The full system</div>
+<h3>30 workflows that run a one-person company</h3>
+<p>This article covers one workflow. The playbook has all 30 — e-commerce ops, finance, marketing, sales, dev &amp; infra, plus the meta-workflows that keep it honest. Each with a copy-paste prompt, the failures, and honest impact ranges. 75 designed pages.</p>
+<div class="btnrow"><a class="btn" href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Get 5 workflows free</a><a class="btn ghost" href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook — $19</a></div>
+<p class="fine" style="margin-top:14px">No email gate on the free sampler. 30-day money-back guarantee on the book.</p></div></article></div><footer class="site"><div class="wrap"><div class="row">
+<span>Written by a solo founder running a physical-product company with zero employees and a team of AI agents.</span></div>
+<div class="row" style="margin-top:14px">
+<a href="index.html">All articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Free 15-page sampler</a><a href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook ($19)</a><a href="https://zonebio5.gumroad.com/partner-with-me">Partner / affiliate (40%)</a></div></div></footer></body></html>
