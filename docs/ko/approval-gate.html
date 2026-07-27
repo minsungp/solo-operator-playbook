@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>승인 게이트, 에이전트를 믿지 않고도 안심하고 쓰는 법 — The Solo Operator</title>
+<meta name="description" content="에이전트가 초안을 만들고 사람이 승인하는 구조가 왜 자동화의 타협이 아니라 자동화 전략 그 자체인지, 실제로 게이트가 잡아낸 사고 사례로 설명합니다.">
+<link rel="canonical" href="https://methezone.github.io/solo-operator-playbook/ko/approval-gate.html">
+<meta property="og:type" content="article"><meta property="og:title" content="승인 게이트, 에이전트를 믿지 않고도 안심하고 쓰는 법 — The Solo Operator">
+<meta property="og:description" content="에이전트가 초안을 만들고 사람이 승인하는 구조가 왜 자동화의 타협이 아니라 자동화 전략 그 자체인지, 실제로 게이트가 잡아낸 사고 사례로 설명합니다."><meta property="og:url" content="https://methezone.github.io/solo-operator-playbook/ko/approval-gate.html">
+<meta property="og:site_name" content="The Solo Operator"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"승인 게이트, 에이전트를 믿지 않고도 안심하고 쓰는 법","description":"에이전트가 초안을 만들고 사람이 승인하는 구조가 왜 자동화의 타협이 아니라 자동화 전략 그 자체인지, 실제로 게이트가 잡아낸 사고 사례로 설명합니다.","datePublished":"2026-07-28","author":{"@type":"Person","name":"The Solo Operator"},"mainEntityOfPage":"https://methezone.github.io/solo-operator-playbook/ko/approval-gate.html"}</script>
+</head><body><header class="site"><div class="bar"><svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g fill="#141413"><rect x="19" y="0" width="2" height="40"/><rect x="0" y="19" width="40" height="2"/><rect x="19" y="0" width="2" height="40" transform="rotate(45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(-45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(67.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-67.5 20 20)" opacity=".5"/></g></svg><span class="name">The Solo Operator</span>
+<nav><a href="../index.html">Articles</a><a href="../ko/index.html">한국어</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler" class="cta">Free sampler</a></nav></div></header><div class="wrap"><article class="post-body">
+<div class="kicker">가드레일</div>
+<h1>승인 게이트, 에이전트를 믿지 않고도 안심하고 쓰는 법</h1>
+<div class="byline">2026-07-28 · 7분 읽기</div>
+<h2>환불이 &quot;완료됐다&quot;는 보고를 받았는데, 사실은 안 됐던 날</h2>
+<p>에이전트가 고객 환불을 처리하고 &quot;환불 완료했습니다&quot;라고 보고한 날이 있었습니다. 저는 그걸 믿고 고객에게 &quot;환불 처리됐습니다&quot;라고 답장까지 보냈습니다. 그런데 다음날 PG사 대시보드를 열어보니 그 환불은 처리된 적이 없었습니다. 취소 가능 한도가 사전 예치금을 요구하는 규칙에 막혀 있었던 겁니다. 에이전트는 버튼을 눌렀고, 화면이 뭔가 반응했고, 그걸 &quot;완료&quot;로 보고했습니다. 하지만 버튼 클릭과 실제 완료는 다른 상태입니다.</p>
+<p>이 사고 이후로 제 모든 워크플로우에는 한 문장이 박혀 있습니다. &quot;클릭은 확인이 아니다. 상태를 바꾸는 모든 행동 후에는 완료 보고 전에 화면에 나타난 결과 상태를 검증할 것.&quot; 이게 승인 게이트라는 시스템의 절반입니다. 나머지 절반은 애초에 에이전트가 특정 행동을 하기 <em>전에</em> 사람이 확인하는 구조입니다.</p>
+<h2>신뢰가 아니라 아키텍처</h2>
+<p>직원 없이 회사 하나를 운영한다는 약속 전체는 에이전트가 되돌릴 수 없고 잘못된 일을 하는 단 하루에 무너집니다. 돈을 잘못 보내고, 정부에 틀린 서류를 제출하고, 고객 전체에게 오류가 있는 메일을 보내고, 프로덕션 데이터를 지우는 그 하루요. 이 두려움 때문에 많은 창업자가 AI를 그냥 &quot;채팅 장난감&quot; 수준에 묶어둡니다.</p>
+<p>제가 찾은 답은 신뢰가 아니라 아키텍처였습니다. 에이전트를 믿을지 말지 고민하는 대신, 애초에 신뢰가 필요 없는 구조를 만드는 겁니다. 원칙은 하나입니다. <strong>에이전트가 초안을 만들고, 사람이 승인하고, 에이전트가 실행한다.</strong></p>
+<p>이걸 실제로 쓰려면 먼저 모든 행동을 되돌릴 수 있는 정도로 분류해야 합니다.</p>
+<table>
+<thead>
+<tr>
+<th>등급</th>
+<th>정의</th>
+<th>예시</th>
+<th>처리 방식</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A. 자유롭게 되돌릴 수 있음</td>
+<td>초안, 리서치, 내부 노트</td>
+<td>카피 초안, 경쟁사 리서치</td>
+<td>게이트 없이 진행</td>
+</tr>
+<tr>
+<td>B. 비용을 치르면 되돌릴 수 있음</td>
+<td>배포, 리스팅 변경, 장부 분류</td>
+<td>스토어 코드 배포, 상품 페이지 수정</td>
+<td>프로세스 게이트(리뷰 패스, 상태 검증)</td>
+</tr>
+<tr>
+<td>C. 되돌릴 수 없거나 외부적임</td>
+<td>송금, 제출, 공개 게시, 고객 커뮤니케이션</td>
+<td>정부 지원사업 제출, 환불 실행, 단체 메일 발송</td>
+<td>하드 사람 게이트, 예외 없음</td>
+</tr>
+</tbody></table>
+<p>C등급에 반드시 들어가야 하는 항목은 명확합니다. 송금, 정부·법률 기관 제출, 공개 게시, 고객에게 나가는 이메일, 프로덕션 배포, 계약 동의나 서명. 이 목록은 &quot;아무리 일상적으로 느껴져도&quot; 예외를 두지 않는 게 핵심입니다. 매일 하는 반복 작업일수록 오히려 안일해지기 쉽기 때문입니다.</p>
+<h2>게이트는 한 겹으로는 반드시 뚫린다</h2>
+<p>처음에는 프롬프트에 &quot;초안만 만들고 절대 발송하지 마세요&quot;라고 써두는 것만으로 충분하다고 생각했습니다. 그런데 &quot;고객 답장을 처리해 줘&quot;라는 애매한 지시 하나에 &quot;처리&quot;가 &quot;발송&quot;과 위험할 만큼 가까운 의미로 해석된 적이 있습니다. 그때부터 게이트를 세 겹으로 겁니다. 프롬프트 수준(&quot;초안만, 절대 발송 금지&quot;), 워크플로우 수준(발송에 제 클릭이 필요한 도구에 초안을 스테이징), 플랫폼 수준(에이전트에게 애초에 권한이 없음 — 읽기 전용 API 키, 지출 상한, 계좌이체 권한 없음). 어느 한 겹은 반드시 실패한다는 전제로 설계해야 실제로 안전합니다.</p>
+<p>그리고 게이트는 운영하는 데 비용이 싸야 합니다. 그렇지 않으면 바쁜 날 제 손으로 게이트를 건너뛰게 됩니다. 배치된 다이제스트, 원탭 승인, 미리 포맷된 리뷰 화면이면 승인 비용이 몇 초로 줄어듭니다. 비싼 게이트는 결국 우회됩니다.</p>
+<h2>게이트가 실제로 잡아낸 사고들</h2>
+<ul>
+<li><strong>막힌 환불을 &quot;완료&quot;로 착각.</strong> 앞서 말한 사례입니다. 상태 검증 규칙이 나온 계기였고, 지금은 PG사 화면에 환불이 실제로 뜨기 전까지는 고객에게 절대 &quot;환불 완료&quot;라고 말하지 않습니다.</li>
+<li><strong>다크 패턴으로의 표류.</strong> 구독 우선 경쟁사를 벤치마킹하던 에이전트가 결제 화면에서 일회성 구매 옵션을 숨기자고 제안한 적이 있습니다. 단기적으로는 전환율에 도움이 될 수 있지만 브랜드를 갉아먹는 방식입니다. &quot;구독은 기본값일 수는 있어도 절대 덫이어서는 안 된다&quot;는 규칙이 이때 메모리에 박혔습니다.</li>
+<li><strong>자신만만한 오분류.</strong> 장부 자동 분류 초기, 신뢰도 컬럼을 강제하기 전에 에이전트가 병원비 지출을 &quot;직원 복리후생&quot;으로 분류한 적이 있습니다. 직원이 한 명도 없는 회사인데도요. 신뢰도 스코어링과 &quot;모르겠으면 사람에게 묻는다&quot;는 탈출구를 넣자 이런 종류의 문제 대부분이 사라졌습니다.</li>
+<li><strong>자동 제출 유혹.</strong> 몇 달간 지원사업 신청서 초안 품질이 계속 좋았습니다. 그러자 &quot;이 정도면 자동 제출해도 되지 않을까&quot;라는 생각이 들었던 순간이 있었습니다. 하지 않았습니다. 그 직후 초안 하나에 미묘하게 낡은 자격 요건 주장이 섞여 있는 걸 발견했습니다. 게이트는 실수만 잡은 게 아니라 제 안일함을 잡았습니다.</li>
+<li><strong>공유 컴포넌트 오염.</strong> 결제 페이지 리뉴얼이 다른 페이지와 공유되는 컴포넌트의 스타일을 바꿔서 엉뚱한 곳의 레이아웃이 깨진 적이 있습니다. 별도 세션이 리뷰어 역할을 맡아 &quot;공유 컴포넌트를 건드리기 전에 모든 사용처를 grep해서 나열할 것&quot;을 확인하게 하자 재발이 멈췄습니다.</li>
+</ul>
+<div class="note pit"><div class="hd">Pitfall I hit</div><p>같은 에이전트 세션이 코드를 짜고 그 코드를 스스로 리뷰하게 두면, 리뷰는 형식적인 요식 행위가 됩니다. &quot;자기가 무슨 의도로 짰는지 이미 아니까요.&quot; 그래서 구현 세션과 리뷰 세션을 반드시 분리합니다. 리뷰 세션에는 스펙과 diff만 주고, &quot;회의적인 시니어 엔지니어&quot;라는 프레이밍을 씌웁니다. 이 분리만으로 리뷰 품질이 완전히 달라집니다.</p></div>
+<p>실제로 이 게이트 구조를 새 워크플로우에 붙일 때 쓰는 프롬프트는 이렇습니다.</p>
+<div class="prompt"><div class="bar"><i></i><i></i><i></i><b>Copy-paste prompt</b></div><pre><code>상시 가드레일 (모든 작업에 로드):
+- 행동 등급: A) 가역 → 진행; B) 비용성 가역 → 리뷰 패스와 상태
+  검증을 거칠 것; C) 비가역 (송금, 제출, 공개 게시, 고객 커뮤니케이션,
+  계약, 삭제) → 준비만 하고 내 명시적 승인을 위해 스테이징할 것.
+- 금지 목록: [본인의 절대 금지 사항, 예: 주민등록번호/카드 보안코드
+  입력 금지, 계약 서명 금지, 정부 신청서 최종 제출 금지].
+- 클릭은 확인이 아니다: 상태를 바꾸는 모든 행동 후에는 완료 보고 전에
+  화면에서 결과 상태를 검증할 것.
+- 어떤 행동이 어느 등급인지 확신이 없으면 C로 취급하고 물어볼 것.
+이 블록의 위반만이 용서받지 못하는 유일한 실패 모드입니다.
+</code></pre></div>
+<div class="note imp"><div class="hd">Impact</div><p>게이트를 운영하는 데 드는 시간은 하루 20<del>40분 정도의 승인 시간입니다. 그게 이제 제 일이고, 이게 대체하는 4</del>6시간의 실제 실행 시간에 비하면 명백히 남는 거래입니다. 비용 효과는 정확히 숫자로 재기는 어렵지만, 게이트 덕분에 어떤 단일 에이전트 실패의 하방도 &quot;몇 분의 리뷰&quot;로 한정된다는 점이 핵심입니다. 그 속성 하나가 나머지 모든 자동화를 마음 놓고 돌릴 수 있게 해줍니다.</p></div>
+<p>승인률이 100%로 계속 찍히는 주가 있다면, 그건 에이전트에 대한 칭찬이 아니라 제 자신에 대한 경고 신호로 읽습니다. 진짜로 검토하고 있다면 가끔은 뭔가를 고치거나 거절하는 게 정상이니까요. 게이트는 자동화의 타협안이 아니라, 그 자체가 자동화 전략입니다. 게이트는 100시간의 실행을 1시간의 리뷰로 바꿔주고, 그 1시간은 한 사람이 실제로 감당할 수 있는 크기입니다.</p>
+<div class="cta-card"><div class="eyebrow">전체 시스템</div>
+<h3>1인 회사를 돌리는 30가지 워크플로우</h3>
+<p>이 글은 워크플로우 하나를 다룹니다. 플레이북에는 30개 전부가 들어 있습니다 — 이커머스 운영, 재무·행정, 마케팅, 세일즈, 개발·인프라, 그리고 시스템을 지탱하는 메타 워크플로우까지. 각각 복사해서 쓰는 프롬프트, 실패 사례, 정직한 효과 범위 포함. 75페이지.</p>
+<div class="btnrow"><a class="btn" href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler-ko">무료로 5개 받기</a><a class="btn ghost" href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook-ko">전체 플레이북 — $15</a></div>
+<p class="fine" style="margin-top:14px">무료 샘플러는 이메일 요구 없음. 30일 환불 보장.</p></div></article></div><footer class="site"><div class="wrap"><div class="row">
+<span>Written by a solo founder running a physical-product company with zero employees and a team of AI agents.</span></div>
+<div class="row" style="margin-top:14px">
+<a href="../index.html">All articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Free 15-page sampler</a><a href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook ($19)</a><a href="https://zonebio5.gumroad.com/partner-with-me">Partner / affiliate (40%)</a></div></div></footer></body></html>
