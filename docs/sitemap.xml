@@ -2,4 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://methezone.github.io/solo-operator-playbook/</loc></url>
 <url><loc>https://methezone.github.io/solo-operator-playbook/five-primitives.html</loc></url>
+<url><loc>https://methezone.github.io/solo-operator-playbook/agent-grant-scanning.html</loc></url>
+<url><loc>https://methezone.github.io/solo-operator-playbook/working-demo-proposals.html</loc></url>
+<url><loc>https://methezone.github.io/solo-operator-playbook/approval-gates.html</loc></url>
+<url><loc>https://methezone.github.io/solo-operator-playbook/ai-bookkeeping.html</loc></url>
+<url><loc>https://methezone.github.io/solo-operator-playbook/agent-deploys-review-pass.html</loc></url>
+<url><loc>https://methezone.github.io/solo-operator-playbook/when-not-to-automate.html</loc></url>
 </urlset>

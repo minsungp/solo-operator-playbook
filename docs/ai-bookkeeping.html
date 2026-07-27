@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I let an agent do my books. It still has to ask first. — The Solo Operator</title>
+<meta name="description" content="How I run monthly expense categorization with an AI agent without letting it guess its way into a bad tax filing.">
+<link rel="canonical" href="https://methezone.github.io/solo-operator-playbook/ai-bookkeeping.html">
+<meta property="og:type" content="article"><meta property="og:title" content="I let an agent do my books. It still has to ask first. — The Solo Operator">
+<meta property="og:description" content="How I run monthly expense categorization with an AI agent without letting it guess its way into a bad tax filing."><meta property="og:url" content="https://methezone.github.io/solo-operator-playbook/ai-bookkeeping.html">
+<meta property="og:site_name" content="The Solo Operator"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"I let an agent do my books. It still has to ask first.","description":"How I run monthly expense categorization with an AI agent without letting it guess its way into a bad tax filing.","datePublished":"2026-07-28","author":{"@type":"Person","name":"The Solo Operator"},"mainEntityOfPage":"https://methezone.github.io/solo-operator-playbook/ai-bookkeeping.html"}</script>
+</head><body><header class="site"><div class="bar"><svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g fill="#141413"><rect x="19" y="0" width="2" height="40"/><rect x="0" y="19" width="40" height="2"/><rect x="19" y="0" width="2" height="40" transform="rotate(45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(-45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(67.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-67.5 20 20)" opacity=".5"/></g></svg><span class="name">The Solo Operator</span>
+<nav><a href="index.html">Articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler" class="cta">Free sampler</a></nav></div></header><div class="wrap"><article class="post-body">
+<div class="kicker">Finance</div>
+<h1>I let an agent do my books. It still has to ask first.</h1>
+<div class="byline">2026-07-28 · 8 min read</div>
+<p>The first time I let an agent loose on my company&#39;s transaction list, it categorized a hospital bill as &quot;staff welfare.&quot; I have no staff. I am the staff. It saw a medical merchant, saw a business card, and made a confident, wrong, entirely plausible-looking leap. Nobody caught it for two weeks, because the whole point of automating bookkeeping is that you stop looking at every line.</p>
+<p>That single line item is why I now run a rule I&#39;d tell any solo operator to adopt before anything else: an agent categorizing your books must ask before it guesses. Not &quot;flag things it&#39;s not sure about eventually.&quot; Ask, structurally, every single month, before anything gets written into the real ledger.</p>
+<h2>The problem auto-categorization doesn&#39;t solve</h2>
+<p>Every bookkeeping SaaS ships with its own auto-tagging, and it&#39;s bad in a specific, predictable way: it categorizes based on merchant type, not context. &quot;Convenience store&quot; becomes... what? Office supplies? A staff meal? Personal groceries picked up on the way home? The tool doesn&#39;t know, so it picks something, and if you don&#39;t look, that something sits in your books until an accountant or an auditor asks about it.</p>
+<p>Left alone, this becomes a quarterly archaeology project. You open the books three months in, find a pile of uncategorized or badly-categorized transactions, and either burn an evening reconstructing what each one was for, or pay your accountant to guess, which is worse, because now someone with no context is making tax-relevant decisions about your business.</p>
+<p>The fix isn&#39;t a smarter auto-tagger. It&#39;s separating the categorization work into three tiers of confidence and treating each one differently.</p>
+<h2>High, medium, low — and only one of those gets applied automatically</h2>
+<p>Here&#39;s the actual monthly workflow I run, a few days after month-end once transactions have settled:</p>
+<ol>
+<li>I keep a one-page categorization rulebook in the agent&#39;s memory: recurring merchants mapped to categories (a specific packaging supplier goes to &quot;materials,&quot; cloud hosting goes to &quot;infrastructure&quot;), a few amount-based heuristics, and an explicit escape hatch for anything the rulebook doesn&#39;t cover.</li>
+<li>The agent opens the bookkeeping tool, pulls everything uncategorized, and works through it with a confidence label on each line: <strong>high</strong> (it matches the rulebook exactly), <strong>medium</strong> (a reasonable inference, but not a rule match), <strong>low</strong> (genuinely unsure).</li>
+<li>High-confidence items get applied directly to the books. Medium items go into a short approval list with a one-line reason each. Low items come to me as plain questions — merchant, amount, date — usually five to ten a month, not fifty.</li>
+<li>Every decision I make on a medium or low item gets written back into the rulebook. The unsure pile shrinks over time because the rulebook actually learns from me, instead of me re-answering the same judgment call every month.</li>
+<li>Before anything&#39;s final, the agent checks its own arithmetic: categorized count plus remaining-uncategorized count has to equal the total number of transactions imported that month. If those numbers don&#39;t add up, something got silently dropped, and that&#39;s worth catching before it becomes a hole in the filing.</li>
+</ol>
+<div class="note pit"><div class="hd">Pitfall I hit</div><p>Before I forced the confidence column into the output, the agent would categorize with total, unwarranted certainty — that hospital bill filed as staff welfare is the example that made me change the process, and the uncomfortable part is how plausible it looked sitting in a spreadsheet next to fifty correctly-tagged rows; a confidence label plus a mandatory low-confidence escape hatch fixed the vast majority of this on its own.</p></div>
+<h2>Why the audit trail matters more than the speed</h2>
+<p>The month-end session used to take three to five dreaded hours. Now it&#39;s twenty to thirty minutes of me approving or correcting a short list. That speed gain is real, but it&#39;s not the part I&#39;d defend if someone pushed back on the whole idea of an agent touching the books. The part I&#39;d defend is the audit trail.</p>
+<p>Every automated system that touches money needs to answer one question cheaply: if someone asks &quot;why does this number look different,&quot; can you reconstruct the answer in minutes, or does it take an hour of digging? My first pass at this had no answer — exclusions and category changes went into the books with no marker, and when my accountant asked why a total had shifted, reconstructing it took real time I didn&#39;t have.</p>
+<p>The fix was boring and it worked: every adjustment the agent makes gets a consistent, searchable memo attached — a fixed keyword plus a short reason. Not a note only I&#39;d understand six months later. A memo my accountant, or a future version of me with no memory of this month, can search for and reconstruct instantly. Speed without a trail just moves the archaeology project from &quot;which category&quot; to &quot;why did this change,&quot; and that second version is worse because it involves someone else&#39;s trust in your books.</p>
+<div class="note imp"><div class="hd">Impact</div><p>The direct cost saving is real but modest — my accountant&#39;s cleanup billing dropped and clean categorization made a later tax-deduction review straightforward, worth a few hundred dollars a year at minimum — but the bigger, harder-to-price value is what a tax audit doesn&#39;t find later, because every exclusion and category decision has a reason attached to it instead of a shrug.</p></div>
+<h2>The personal-vs-business problem is a separate job</h2>
+<p>Categorization and personal-expense auditing feel like the same task and they are not, and mixing them into one session degrades both. Categorization asks &quot;what bucket does this business expense belong in.&quot; The audit asks a completely different question: &quot;did a personal expense leak into the business books at all.&quot; When your company card lives in your personal wallet — which for a lot of solo founders it does — pharmacy runs, dinners that weren&#39;t really meetings, and one-off personal purchases slide into the same statement as your suppliers and hosting bills. Each one is small. Over six months they add up into a real compliance risk.</p>
+<p>I run this as a separate, twice-a-year pass, with a written policy defined before the agent touches anything:</p>
+<table>
+<thead>
+<tr>
+<th>Bucket</th>
+<th>Examples</th>
+<th>Agent&#39;s action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Clearly personal</td>
+<td>clinics, salons, entertainment venues, home utilities</td>
+<td>flag for exclusion</td>
+</tr>
+<tr>
+<td>Clearly business</td>
+<td>suppliers, hosting, shipping</td>
+<td>leave alone, no flag needed</td>
+</tr>
+<tr>
+<td>Ambiguous</td>
+<td>convenience stores, solo meals, general retail</td>
+<td>leave untouched, list separately</td>
+</tr>
+</tbody></table>
+<p>The critical rule is that ambiguous items are left alone by default. You exclude only what&#39;s unambiguously personal. My first attempt got this backwards in both directions — one pass flagged every solo lunch as suspicious, a looser second pass missed something as obvious as home gas bills. It took two iterations of the written policy, not the prompt, to converge on something reasonable. The policy decides, not the agent&#39;s judgment call in the moment, because the policy is the thing you can defend to an accountant and the agent&#39;s in-the-moment judgment is not.</p>
+<p>I still review every flagged line myself before anything gets excluded from the books. This is a twenty-to-forty-minute session, not a formality, because the tax consequences land on me, not on the agent.</p>
+<h2>What your accountant actually needs</h2>
+<p>None of this is really built for me. It&#39;s built so that twice a year I can hand a package to someone with far less context than I have and have them trust it without a long phone call. That package needs three things, and none of them are &quot;a bigger spreadsheet&quot;:</p>
+<ul>
+<li>A clean categorized ledger where every automated decision has a stated confidence level and, for anything adjusted, a searchable reason attached.</li>
+<li>A short, explicit list of what was excluded as personal and why, so nobody has to reconstruct it from memory.</li>
+<li>Totals that reconcile — imported count, categorized count, excluded count, all adding up to something an accountant can check in one pass rather than trusting blindly.</li>
+</ul>
+<p>Here&#39;s the actual prompt template I run every month, unedited from what&#39;s in my agent&#39;s memory:</p>
+<div class="prompt"><div class="bar"><i></i><i></i><i></i><b>Copy-paste prompt</b></div><pre><code>You are my bookkeeper&#39;s assistant. Open [bookkeeping tool] and list
+all uncategorized transactions for [month]. Categorize each using
+this rulebook: [paste rulebook]. For each item output:
+merchant | amount | date | category | confidence (H/M/L) | reason.
+Apply H items directly. Queue M items for my approval. Ask me about
+L items individually. After applying, verify: categorized + remaining
+= total imported, and report the three numbers. Flag anything that
+looks like a personal expense separately — do not categorize those.
+</code></pre></div>
+<p>The last line in that prompt is doing more work than it looks like. It keeps the two jobs separate even when they&#39;re running in the same tool, in the same month, on the same list of transactions. Categorization and personal-expense auditing use different policies, different review cadences, and different levels of scrutiny from me, and the moment you let an agent conflate them, you lose the thing that made this whole exercise trustworthy in the first place: a clear, defensible answer to &quot;why does this number look the way it does.&quot;</p>
+<p>The agent got faster at this every month. What actually matters is that it got more honest about what it didn&#39;t know, and that it never once got to decide what happens to something it wasn&#39;t sure about.</p>
+<div class="cta-card"><div class="eyebrow">The full system</div>
+<h3>30 workflows that run a one-person company</h3>
+<p>This article covers one workflow. The playbook has all 30 — e-commerce ops, finance, marketing, sales, dev &amp; infra, plus the meta-workflows that keep it honest. Each with a copy-paste prompt, the failures, and honest impact ranges. 75 designed pages.</p>
+<div class="btnrow"><a class="btn" href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Get 5 workflows free</a><a class="btn ghost" href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook — $19</a></div>
+<p class="fine" style="margin-top:14px">No email gate on the free sampler. 30-day money-back guarantee on the book.</p></div></article></div><footer class="site"><div class="wrap"><div class="row">
+<span>Written by a solo founder running a physical-product company with zero employees and a team of AI agents.</span></div>
+<div class="row" style="margin-top:14px">
+<a href="index.html">All articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Free 15-page sampler</a><a href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook ($19)</a><a href="https://zonebio5.gumroad.com/partner-with-me">Partner / affiliate (40%)</a></div></div></footer></body></html>

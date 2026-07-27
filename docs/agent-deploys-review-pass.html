@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My coding agent shipped a bug to three pages it wasn't touching — The Solo Operator</title>
+<meta name="description" content="How I review production code I didn't write, why the reviewer can't be the same agent that built it, and the checklist that came out of two expensive incidents.">
+<link rel="canonical" href="https://methezone.github.io/solo-operator-playbook/agent-deploys-review-pass.html">
+<meta property="og:type" content="article"><meta property="og:title" content="My coding agent shipped a bug to three pages it wasn't touching — The Solo Operator">
+<meta property="og:description" content="How I review production code I didn't write, why the reviewer can't be the same agent that built it, and the checklist that came out of two expensive incidents."><meta property="og:url" content="https://methezone.github.io/solo-operator-playbook/agent-deploys-review-pass.html">
+<meta property="og:site_name" content="The Solo Operator"><meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"My coding agent shipped a bug to three pages it wasn't touching","description":"How I review production code I didn't write, why the reviewer can't be the same agent that built it, and the checklist that came out of two expensive incidents.","datePublished":"2026-07-28","author":{"@type":"Person","name":"The Solo Operator"},"mainEntityOfPage":"https://methezone.github.io/solo-operator-playbook/agent-deploys-review-pass.html"}</script>
+</head><body><header class="site"><div class="bar"><svg class="mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g fill="#141413"><rect x="19" y="0" width="2" height="40"/><rect x="0" y="19" width="40" height="2"/><rect x="19" y="0" width="2" height="40" transform="rotate(45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(-45 20 20)"/><rect x="19" y="0" width="2" height="40" transform="rotate(22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-22.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(67.5 20 20)" opacity=".5"/><rect x="19" y="0" width="2" height="40" transform="rotate(-67.5 20 20)" opacity=".5"/></g></svg><span class="name">The Solo Operator</span>
+<nav><a href="index.html">Articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler" class="cta">Free sampler</a></nav></div></header><div class="wrap"><article class="post-body">
+<div class="kicker">Engineering</div>
+<h1>My coding agent shipped a bug to three pages it wasn't touching</h1>
+<div class="byline">2026-07-28 · 8 min read</div>
+<p>The spec was simple: restyle the buy button on the product detail pages. Nothing else. The agent implemented it, I skimmed the diff, it looked like a button change, and I shipped it. Within a day I had a report that checkout, cart, and one subscription page had all quietly deformed. The button lived in a shared component, and restyling it for one page had restyled it everywhere that component was used. I&#39;ve paid for that exact mistake twice, on two different redesigns, months apart, because the first time I fixed the symptom instead of the process.</p>
+<p>I run a store with no other engineers. Everything that ships to production goes through a coding agent I treat like a contractor with commit access and a probation period that never ends. My job was never to write the feature. My job is to be able to say, with confidence, &quot;this change is contained to what it claims to touch&quot; — and for a long time I couldn&#39;t actually do that, I was just skimming a diff and hoping the file list looked reasonable.</p>
+<h2>The naive move, and why it&#39;s expensive specifically for a store</h2>
+<p>The tempting shortcut when you&#39;re shipping alone is to let the agent push straight to production for anything that looks small — &quot;it&#39;s just a copy change,&quot; &quot;it&#39;s just a button.&quot; A production e-commerce site doesn&#39;t forgive that shortcut the way an internal tool would. A checkout bug costs money by the minute it&#39;s live, not by the hour someone notices it. So the bar for &quot;small enough to skip review&quot; needs to be near zero, not near &quot;looks small in the diff summary.&quot;</p>
+<p>The process that actually holds up has five stages, and I don&#39;t skip any of them for anything beyond an actual typo fix.</p>
+<h2>1. Spec what must NOT change</h2>
+<p>Before the agent touches anything, I write the change in plain language, and — this is the part I used to skip — I write down explicitly what must stay identical. &quot;Restyle the buy button on PDPs; checkout, cart, and subscription pages must be pixel-identical.&quot; That second sentence is the one that would have caught my original incident before it happened, because it forces the agent (and me) to think about blast radius before writing a line of code, not after a bug report.</p>
+<h2>2. Grep before you restyle anything shared</h2>
+<p>This is the single rule that came directly out of two incidents, and it&#39;s now non-negotiable: before modifying any shared component, the agent greps every usage of it across the codebase and lists them in its change summary, with a one-line impact note per usage. Most of my production incidents trace back to exactly this pattern — a component gets restyled for the page someone&#39;s thinking about, and it silently deforms every other page that happens to reuse it. Once you&#39;ve been burned by this twice, you stop trusting &quot;it&#39;s a small change&quot; as a category and start asking &quot;what else uses this file&quot; as a reflex, every time.</p>
+<div class="note pit"><div class="hd">Pitfall I hit</div><p>The shared-component leak happened to me twice on completely different redesigns — a checkout re-theme and, months later, a product-page redesign — and the second time it happened I realized it wasn&#39;t bad luck, it was a missing line in my checklist; when the same class of bug recurs on unrelated projects, that&#39;s a process gap, not an unlucky week.</p></div>
+<h2>3. Review with a fresh agent session, not the one that built it</h2>
+<p>The mistake that undid my early review process for a while was subtler than the shared-component problem: I had the same agent session that implemented the change also review it. The review was a formality every time, because the agent &quot;knew what it meant&quot; — it reviewed its own intentions, not the actual diff. It couldn&#39;t be skeptical about a decision it had just made in good faith five minutes earlier.</p>
+<p>The fix is to spin up a genuinely fresh session with no memory of the implementation&#39;s reasoning, hand it only the spec and the diff, and frame it explicitly as a skeptical reviewer. That framing matters more than it sounds like it should. &quot;Review this as a senior engineer looking for problems&quot; produces a completely different quality of output than &quot;check if this diff matches the spec.&quot; Here&#39;s how reviewing a diff you didn&#39;t write actually differs from writing it in the first place:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Implementer&#39;s view</th>
+<th>Fresh reviewer&#39;s view</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Context</td>
+<td>Knows what it meant to change</td>
+<td>Only knows the stated spec</td>
+</tr>
+<tr>
+<td>Bias</td>
+<td>Confirms its own intent</td>
+<td>Hunts for contradictions to the spec</td>
+</tr>
+<tr>
+<td>Blast radius</td>
+<td>Assumes contained if it &quot;felt&quot; contained</td>
+<td>Explicitly checks every file touched</td>
+</tr>
+<tr>
+<td>Business rules</td>
+<td>May not have been told them explicitly</td>
+<td>Should be handed them as a checklist</td>
+</tr>
+</tbody></table>
+<p>The reviewer&#39;s job is specific, not general: hunt for unintended file changes, shared-component blast radius, hardcoded values that should have been config, and violations of business invariants — discount schedules, pricing logic, anything that&#39;s a rule rather than a preference. &quot;Looks fine to me&quot; is not a verdict. &quot;Approve&quot; or &quot;request changes, with reasons&quot; is.</p>
+<h2>4. Preview, then smoke test, then production</h2>
+<p>Nothing goes straight from review to live. It goes to a preview deployment first, and for anything touching money — checkout, cart, subscription flows — I run a full mystery-shopper pass through the actual purchase flow on that preview URL before it goes anywhere near production. This step catches the class of bug that a code review genuinely can&#39;t: things that are syntactically fine and logically wrong, like a discount tier that computes correctly for four subscription cadences and silently wrong for the fifth.</p>
+<p>Only after that does it go to production. And even then the job isn&#39;t done — the agent re-verifies the live site immediately after deploy, as an actual customer would experience it, and takes before-and-after screenshots. &quot;Deployed successfully&quot; and &quot;deployed correctly&quot; are different claims, and only one of them is worth trusting without a look.</p>
+<h2>5. Every incident becomes a permanent checklist line</h2>
+<p>My deploy checklist is nine lines long. Every line on it is a scar. That&#39;s not a rhetorical flourish — I mean it literally traces back to a specific incident that cost me something, and the checklist is the only reason I haven&#39;t repeated any of them a third time. When something goes wrong anyway, despite the process, it gets a short postmortem written into the checklist immediately, while the details are fresh, not summarized weeks later from memory.</p>
+<div class="note imp"><div class="hd">Impact</div><p>Agency-equivalent development for a store like mine would run somewhere in the low thousands of dollars a month; my tooling costs a fraction of that, and the review process itself has caught revenue-touching bugs before they reached production at least once a quarter — each one worth more on its own than the month&#39;s entire tool bill, which is the actual argument for keeping a review pass instead of skipping it to save twenty minutes.</p></div>
+<h2>What review actually looks like when you can&#39;t write the code</h2>
+<p>The honest answer to &quot;how do you review a diff you didn&#39;t write and couldn&#39;t have written yourself&quot; is that you don&#39;t review the code quality. You review containment and invariants. Does the file list match the stated scope. Does anything outside that scope change. Does the change respect the business rules that were true before the change and need to stay true after it — pricing, discount math, anything a customer-facing number depends on. That&#39;s a review any operator can learn to do competently without being able to write the feature themselves, and it&#39;s the actual skill that makes solo-founder shipping survivable rather than a slow-motion liability.</p>
+<p>Here&#39;s the prompt pair I actually run — one for the implementer, one for the reviewer, always as two separate sessions:</p>
+<div class="prompt"><div class="bar"><i></i><i></i><i></i><b>Copy-paste prompt</b></div><pre><code>Change spec: [plain-language description]. Must-not-change: [list].
+Implement on branch [name]. Requirements:
+- Before touching any shared component, grep all usages and list
+  them in your summary with an impact note each.
+- Respect business invariants: [discount schedule, pricing rules].
+- Output: diff summary by file, shared-component impact list,
+  and preview URL.
+Then STOP. A separate review pass and my approval happen before
+any production deploy.
+[Reviewer session prompt:] Review this diff against the spec above
+as a skeptical senior engineer. Hunt specifically for: files
+changed beyond scope, shared-component side effects, and invariant
+violations. Verdict: approve / request changes, with reasons.
+</code></pre></div>
+<p>One more habit that came from a genuinely dumb loss: I once had an in-progress redesign wiped out because a working directory got deleted while it was still the active workspace for a session. Commit early, push often, and treat &quot;delete this directory&quot; as an action that needs the same suspicion as a production deploy, because from a data-loss standpoint it basically is one.</p>
+<p>None of this makes shipping alone as safe as shipping with a team. It makes the failure modes cheap and specific instead of expensive and vague — which, for a solo operator, is the actual bar worth clearing.</p>
+<div class="cta-card"><div class="eyebrow">The full system</div>
+<h3>30 workflows that run a one-person company</h3>
+<p>This article covers one workflow. The playbook has all 30 — e-commerce ops, finance, marketing, sales, dev &amp; infra, plus the meta-workflows that keep it honest. Each with a copy-paste prompt, the failures, and honest impact ranges. 75 designed pages.</p>
+<div class="btnrow"><a class="btn" href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Get 5 workflows free</a><a class="btn ghost" href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook — $19</a></div>
+<p class="fine" style="margin-top:14px">No email gate on the free sampler. 30-day money-back guarantee on the book.</p></div></article></div><footer class="site"><div class="wrap"><div class="row">
+<span>Written by a solo founder running a physical-product company with zero employees and a team of AI agents.</span></div>
+<div class="row" style="margin-top:14px">
+<a href="index.html">All articles</a><a href="https://zonebio5.gumroad.com/l/solo-operator-free-sampler">Free 15-page sampler</a><a href="https://zonebio5.gumroad.com/l/solo-operator-ai-playbook">Full playbook ($19)</a><a href="https://zonebio5.gumroad.com/partner-with-me">Partner / affiliate (40%)</a></div></div></footer></body></html>
