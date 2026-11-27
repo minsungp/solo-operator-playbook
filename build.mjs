@@ -5,7 +5,7 @@ import path from 'node:path';
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const SRC = path.join(ROOT, 'articles');
 const OUT = path.join(ROOT, 'docs');
-const SITE = 'https://methezone.github.io/solo-operator-playbook';
+const SITE = 'https://minsungp.github.io/solo-operator-playbook';
 const PAID = 'https://zonebio5.gumroad.com/l/solo-operator-ai-playbook';
 const FREE = 'https://zonebio5.gumroad.com/l/solo-operator-free-sampler';
 
